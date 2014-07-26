@@ -1,0 +1,213 @@
+// gift: command line interface to Go image filtering toolkit
+package main
+
+import (
+	"flag"
+	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
+	"io"
+	"os"
+
+	"github.com/disintegration/gift"
+)
+
+var (
+	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue float64
+	gray, neg, xpose, xverse, fliph, flipv, emboss, edge                    bool
+	res, cropspec, sigspec, unsharp                                         string
+	rotval, minvalue, maxvalue, meanvalue, medvalue                         int
+)
+
+func main() {
+	flag.Float64Var(&blurvalue, "blur", 0, "blur value")
+	flag.Float64Var(&brvalue, "brightness", -200, "brightness value (-100, 100)")
+	flag.Float64Var(&hvalue, "hue", -200, "hue value (-180, 180)")
+	flag.Float64Var(&contvalue, "contrast", -200, "contrast value (-100, 100)")
+	flag.Float64Var(&satvalue, "saturation", -200, "saturation value (-100, 500)")
+	flag.Float64Var(&gammavalue, "gamma", 0, "gamma value")
+	flag.Float64Var(&sepiavalue, "sepia", -1, "sepia percentage (0-100)")
+	flag.IntVar(&rotval, "rotate", 0, "rotate 90, 180, 270 degrees counter-clockwise")
+	flag.IntVar(&maxvalue, "max", 0, "local maximum (kernel size)")
+	flag.IntVar(&minvalue, "min", 0, "local minimum (kernel size)")
+	flag.IntVar(&medvalue, "median", 0, "local median filter (kernel size)")
+	flag.IntVar(&meanvalue, "mean", 0, "local mean filter (kernel size)")
+	flag.BoolVar(&flipv, "flipv", false, "flip vertical")
+	flag.BoolVar(&fliph, "fliph", false, "flip horizontal")
+	flag.BoolVar(&gray, "gray", false, "grayscale")
+	flag.BoolVar(&neg, "invert", false, "invert")
+	flag.BoolVar(&xpose, "transpose", false, "flip horizontally and rotate 90° counter-clockwise")
+	flag.BoolVar(&xverse, "transverse", false, " flips vertically and rotate 90° counter-clockwise")
+	flag.BoolVar(&emboss, "emboss", false, "emboss")
+	flag.BoolVar(&edge, "edge", false, "edge")
+	flag.StringVar(&res, "resize", "", "resize w,h")
+	flag.StringVar(&cropspec, "crop", "", "crop x1,y1,x2,y2")
+	flag.StringVar(&sigspec, "sigmoid", "", "sigmoid contrast (midpoint,factor)")
+	flag.StringVar(&unsharp, "unsharp", "", "unsharp mask (sigma,amount,threshold)")
+
+	flag.Parse()
+
+	var f io.Reader = os.Stdin
+	var ferr error
+	var fname string
+	if len(flag.Args()) > 0 {
+		fname = flag.Args()[0]
+		f, ferr = os.Open(fname)
+		if ferr != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", ferr)
+			os.Exit(1)
+		}
+	}
+
+	src, format, ierr := image.Decode(f)
+	if ierr != nil {
+		fmt.Fprintf(os.Stderr, "%s: %v\n", fname, ierr)
+		os.Exit(2)
+	}
+
+	g := gift.New() // initial state
+
+	// stack filters when command flags are set (not default values)
+	if blurvalue > 0 {
+		g.Add(gift.GaussianBlur(float32(blurvalue)))
+	}
+
+	if brvalue >= -100 && brvalue <= 100 {
+		g.Add(gift.Brightness(float32(brvalue)))
+	}
+
+	if hvalue >= -180 && hvalue <= 180 {
+		g.Add(gift.Hue(float32(hvalue)))
+	}
+
+	if contvalue >= -100 && contvalue <= 100 {
+		g.Add(gift.Contrast(float32(contvalue)))
+	}
+
+	if satvalue >= -100 && satvalue <= 500 {
+		g.Add(gift.Saturation(float32(satvalue)))
+	}
+
+	if gammavalue > 0 {
+		g.Add(gift.Gamma(float32(gammavalue)))
+	}
+
+	if sepiavalue >= 0 && sepiavalue <= 100 {
+		g.Add(gift.Sepia(float32(sepiavalue)))
+	}
+
+	if medvalue > 0 && medvalue%1 == 0 {
+		g.Add(gift.Median(medvalue, true))
+	}
+
+	if meanvalue > 0 && meanvalue%1 == 0 {
+		g.Add(gift.Mean(meanvalue, true))
+	}
+
+	if minvalue > 0 && minvalue%1 == 0 {
+		g.Add(gift.Minimum(minvalue, true))
+	}
+
+	if maxvalue > 0 && maxvalue%1 == 0 {
+		g.Add(gift.Maximum(maxvalue, true))
+	}
+
+	if rotval == 90 {
+		g.Add(gift.Rotate90())
+	}
+
+	if rotval == 180 {
+		g.Add(gift.Rotate180())
+	}
+
+	if rotval == 270 {
+		g.Add(gift.Rotate270())
+	}
+
+	if gray {
+		g.Add(gift.Grayscale())
+	}
+
+	if neg {
+		g.Add(gift.Invert())
+	}
+
+	if xpose {
+		g.Add(gift.Transpose())
+	}
+
+	if xverse {
+		g.Add(gift.Transverse())
+	}
+
+	if fliph {
+		g.Add(gift.FlipHorizontal())
+	}
+
+	if flipv {
+		g.Add(gift.FlipVertical())
+	}
+
+	if emboss {
+		g.Add(gift.Convolution(
+			[]float32{-1, -1, 0, -1, 1, 1, 0, 1, 1},
+			false, false, false, 0.0))
+	}
+
+	if edge {
+		g.Add(gift.Convolution(
+			[]float32{-1, -1, -1, -1, 8, -1, -1, -1, -1},
+			false, false, false, 0.0))
+	}
+
+	if len(res) > 0 {
+		var w, h int
+		nr, err := fmt.Sscanf(res, "%d,%d", &w, &h)
+		if nr != 2 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -resize width,height\n")
+			os.Exit(3)
+		}
+		g.Add(gift.Resize(w, h, gift.LanczosResampling))
+	}
+
+	if len(cropspec) > 0 {
+		var x1, y1, x2, y2 int
+		nr, err := fmt.Sscanf(cropspec, "%d,%d,%d,%d", &x1, &y1, &x2, &y2)
+		if nr != 4 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -crop x1,y1,x2,y2\n")
+			os.Exit(4)
+		}
+		g.Add(gift.Crop(image.Rect(x1, y1, x2, y2)))
+	}
+
+	if len(unsharp) > 0 {
+		var sigma, amount, threshold float32
+		nr, err := fmt.Sscanf(unsharp, "%g,%g,%g", &sigma, &amount, &threshold)
+		if nr != 3 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -unsharp sigma,amount,threshold\n")
+			os.Exit(5)
+		}
+		g.Add(gift.UnsharpMask(sigma, amount, threshold))
+	}
+
+	if len(sigspec) > 0 {
+		var midpoint, factor float32
+		nr, err := fmt.Sscanf(sigspec, "%g,%g", &midpoint, &factor)
+		if nr != 2 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -sigma midpoint,factor\n")
+			os.Exit(6)
+		}
+		g.Add(gift.Sigmoid(midpoint, factor))
+	}
+
+	// make the filtered image, writing to stdout
+	dst := image.NewRGBA(g.Bounds(src.Bounds()))
+	g.Draw(dst, src)
+	switch format {
+	case "png":
+		png.Encode(os.Stdout, dst)
+	case "jpeg":
+		jpeg.Encode(os.Stdout, dst, nil)
+	}
+}
