@@ -1,13 +1,15 @@
 gift
 ====
 
-Command line interface to the Go Image Filtering toolkit
+Command line interface to the [Go Image Filtering Toolkit](https://github.com/disintegration/gift)
 
-==Install==
+Install
+===
 
     go get github.com/ajstarks/gift
     
-==Usage==
+Usage
+===
 
 gift reads either from a single file (PNG or JPEG) or standard input and always writes to standard output:
 
