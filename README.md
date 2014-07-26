@@ -3,6 +3,12 @@ gift
 
 Command line interface to the Go Image Filtering toolkit
 
+==Install==
+
+    go get github.com/ajstarks/gift
+    
+==Usage==
+
 gift reads either from a single file (PNG or JPEG) or standard input and always writes to standard output:
 
     gift -contrast 80 foo.jpg > contrast.jpg
