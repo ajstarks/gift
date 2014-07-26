@@ -3,31 +3,41 @@ gift
 
 Command line interface to the Go Image Filtering toolkit
 
-`Usage of gift:
-  -blur=0: blur value
-  -brightness=-200: brightness value (-100, 100)
-  -contrast=-200: contrast value (-100, 100)
-  -crop="": crop x1,y1,x2,y2
-  -edge=false: edge
-  -emboss=false: emboss
-  -fliph=false: flip horizontal
-  -flipv=false: flip vertical
-  -gamma=0: gamma value
-  -gray=false: grayscale
-  -hue=-200: hue value (-180, 180)
-  -invert=false: invert
-  -max=0: local maximum (kernel size)
-  -mean=0: local mean filter (kernel size)
-  -median=0: local median filter (kernel size)
-  -min=0: local minimum (kernel size)
-  -resize="": resize w,h
-  -rotate=0: rotate 90, 180, 270 degrees counter-clockwise
-  -saturation=-200: saturation value (-100, 500)
-  -sepia=-1: sepia percentage (0-100)
-  -sigmoid="": sigmoid contrast (midpoint,factor)
-  -transpose=false: flip horizontally and rotate 90° counter-clockwise
-  -transverse=false:  flips vertically and rotate 90° counter-clockwise
-  -unsharp="": unsharp mask (sigma,amount,threshold)
-`
+gift reads either from a single file (PNG or JPEG) or standard input and always writes to standard output:
+
+    gift -contrast 80 foo.jpg > contrast.jpg
+    gift -flipv < foo.png > flipped.png
+    
+Filters can be combined.  For example to blur and invert:
+
+    gift -invert -blur 4 foo.jpg > inverted-blurred.jpg
+		
+Here are the command flags:
+
+    -blur=0: blur value
+    -brightness=<value>: brightness value (-100, 100)
+    -contrast=<value>: contrast value (-100, 100)
+    -crop=x1,y1,x2,y2
+    -edge: edge
+    -emboss: emboss
+    -fliph: flip horizontal
+    -flipv: flip vertical
+    -gamma=<value>: gamma value
+    -gray: grayscale
+    -hue=<value>: hue value (-180, 180)
+    -invert: invert
+    -max=<value>: local maximum (kernel size)
+    -mean=<value>: local mean filter (kernel size)
+    -median=<value>: local median filter (kernel size)
+    -min=<value>: local minimum (kernel size)
+    -resize=w,h: resize w,h
+    -rotate=<value>: rotate 90, 180, 270 degrees counter-clockwise
+    -saturation=<value>: saturation value (-100, 500)
+    -sepia=<value>: sepia percentage (0-100)
+    -sigmoid=midpint,factor: sigmoid contrast
+    -transpose: flip horizontally and rotate 90° counter-clockwise
+    -transverse:  flips vertically and rotate 90° counter-clockwise
+    -unsharp=sigma,amount,threshold: unsharp mask
+
 
 See testgift.sh for typical usage
