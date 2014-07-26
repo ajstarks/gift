@@ -1,5 +1,5 @@
 #!/bin/sh
-input=$1
+input=$1 
 ./gift -blur=3 $input				> blur.jpg
 ./gift -brightness=30 $input		> bright30.jpg
 ./gift -brightness=-30 $input		> bright-30.jpg
