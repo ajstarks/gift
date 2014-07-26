@@ -3,7 +3,7 @@ gift
 
 Command line interface to the Go Image Filtering toolkit
 
-  Usage of ./gift:
+`Usage of gift:
   -blur=0: blur value
   -brightness=-200: brightness value (-100, 100)
   -contrast=-200: contrast value (-100, 100)
@@ -28,6 +28,6 @@ Command line interface to the Go Image Filtering toolkit
   -transpose=false: flip horizontally and rotate 90° counter-clockwise
   -transverse=false:  flips vertically and rotate 90° counter-clockwise
   -unsharp="": unsharp mask (sigma,amount,threshold)
-
+`
 
 See testgift.sh for typical usage
