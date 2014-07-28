@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"image"
+	"image/color"
 	"image/jpeg"
 	"image/png"
 	"io"
@@ -17,7 +18,7 @@ var (
 	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue float64
 	gray, neg, xpose, xverse, fliph, flipv, emboss, edge                    bool
 	res, cropspec, sigspec, unsharp                                         string
-	rotval, minvalue, maxvalue, meanvalue, medvalue                         int
+	rotvalue, minvalue, maxvalue, meanvalue, medvalue                       int
 )
 
 func main() {
@@ -28,7 +29,7 @@ func main() {
 	flag.Float64Var(&satvalue, "saturation", -200, "saturation value (-100, 500)")
 	flag.Float64Var(&gammavalue, "gamma", 0, "gamma value")
 	flag.Float64Var(&sepiavalue, "sepia", -1, "sepia percentage (0-100)")
-	flag.IntVar(&rotval, "rotate", 0, "rotate 90, 180, 270 degrees counter-clockwise")
+	flag.IntVar(&rotvalue, "rotate", 0, "rotate specified degrees counter-clockwise")
 	flag.IntVar(&maxvalue, "max", 0, "local maximum (kernel size)")
 	flag.IntVar(&minvalue, "min", 0, "local minimum (kernel size)")
 	flag.IntVar(&medvalue, "median", 0, "local median filter (kernel size)")
@@ -73,94 +74,115 @@ func main() {
 		g.Add(gift.GaussianBlur(float32(blurvalue)))
 	}
 
+	// brightness
 	if brvalue >= -100 && brvalue <= 100 {
 		g.Add(gift.Brightness(float32(brvalue)))
 	}
 
+	// hue
 	if hvalue >= -180 && hvalue <= 180 {
 		g.Add(gift.Hue(float32(hvalue)))
 	}
 
+	// contrast
 	if contvalue >= -100 && contvalue <= 100 {
 		g.Add(gift.Contrast(float32(contvalue)))
 	}
 
+	// saturation
 	if satvalue >= -100 && satvalue <= 500 {
 		g.Add(gift.Saturation(float32(satvalue)))
 	}
 
+	// gamma
 	if gammavalue > 0 {
 		g.Add(gift.Gamma(float32(gammavalue)))
 	}
 
+	// sepia
 	if sepiavalue >= 0 && sepiavalue <= 100 {
 		g.Add(gift.Sepia(float32(sepiavalue)))
 	}
 
+	// median
 	if medvalue > 0 && medvalue%1 == 0 {
 		g.Add(gift.Median(medvalue, true))
 	}
 
+	// mean
 	if meanvalue > 0 && meanvalue%1 == 0 {
 		g.Add(gift.Mean(meanvalue, true))
 	}
 
+	// minimum
 	if minvalue > 0 && minvalue%1 == 0 {
 		g.Add(gift.Minimum(minvalue, true))
 	}
 
+	// maximum
 	if maxvalue > 0 && maxvalue%1 == 0 {
 		g.Add(gift.Maximum(maxvalue, true))
 	}
 
-	if rotval == 90 {
-		g.Add(gift.Rotate90())
+	// rotate
+	if rotvalue > 0 && rotvalue <= 360 {
+		switch rotvalue {
+		case 90:
+			g.Add(gift.Rotate90())
+		case 180:
+			g.Add(gift.Rotate180())
+		case 270:
+			g.Add(gift.Rotate270())
+		default:
+			g.Add(gift.Rotate(float32(rotvalue), color.White, gift.LinearInterpolation))
+		}
 	}
 
-	if rotval == 180 {
-		g.Add(gift.Rotate180())
-	}
-
-	if rotval == 270 {
-		g.Add(gift.Rotate270())
-	}
-
+	// grayscale
 	if gray {
 		g.Add(gift.Grayscale())
 	}
 
+	// invert
 	if neg {
 		g.Add(gift.Invert())
 	}
 
+	// transpose
 	if xpose {
 		g.Add(gift.Transpose())
 	}
 
+	// transverse
 	if xverse {
 		g.Add(gift.Transverse())
 	}
 
+	// flip horizontal
 	if fliph {
 		g.Add(gift.FlipHorizontal())
 	}
 
+	// flip vertical
 	if flipv {
 		g.Add(gift.FlipVertical())
 	}
 
+	// emboss
 	if emboss {
 		g.Add(gift.Convolution(
 			[]float32{-1, -1, 0, -1, 1, 1, 0, 1, 1},
 			false, false, false, 0.0))
 	}
 
+	// edge detections
 	if edge {
 		g.Add(gift.Convolution(
 			[]float32{-1, -1, -1, -1, 8, -1, -1, -1, -1},
 			false, false, false, 0.0))
 	}
 
+	// resize
 	if len(res) > 0 {
 		var w, h int
 		nr, err := fmt.Sscanf(res, "%d,%d", &w, &h)
@@ -171,6 +193,7 @@ func main() {
 		g.Add(gift.Resize(w, h, gift.LanczosResampling))
 	}
 
+	// crop
 	if len(cropspec) > 0 {
 		var x1, y1, x2, y2 int
 		nr, err := fmt.Sscanf(cropspec, "%d,%d,%d,%d", &x1, &y1, &x2, &y2)
@@ -181,6 +204,7 @@ func main() {
 		g.Add(gift.Crop(image.Rect(x1, y1, x2, y2)))
 	}
 
+	// unsharp
 	if len(unsharp) > 0 {
 		var sigma, amount, threshold float32
 		nr, err := fmt.Sscanf(unsharp, "%g,%g,%g", &sigma, &amount, &threshold)
@@ -191,6 +215,7 @@ func main() {
 		g.Add(gift.UnsharpMask(sigma, amount, threshold))
 	}
 
+	// sigmoid
 	if len(sigspec) > 0 {
 		var midpoint, factor float32
 		nr, err := fmt.Sscanf(sigspec, "%g,%g", &midpoint, &factor)
