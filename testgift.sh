@@ -7,8 +7,8 @@ then
 fi
 input=$1 
 ./gift -blur=3 $input              > blur.jpg
-./gift -brightness=30 $input       > bright30.jpg
-./gift -brightness=-30 $input      > bright-30.jpg
+./gift -brightness=20 $input       > bright30.jpg
+./gift -brightness=-20 $input      > bright-30.jpg
 ./gift -contrast=30 $input         > contrast30.jpg
 ./gift -contrast=-30 $input        > contrast-30.jpg
 ./gift -crop=90,90,250,250 $input  > crop.jpg
@@ -17,7 +17,7 @@ input=$1
 ./gift -fliph $input               > fliph.jpg
 ./gift -flipv $input               > flipv.jpg
 ./gift -gamma=1.5 $input           > gamma.jpg
-./gift -gray $input                > gary.jpg
+./gift -gray $input                > gray.jpg
 ./gift -hue=45 $input              > hue45.jpg
 ./gift -hue=-45 $input             > hue-45.jpg
 ./gift -invert $input              > invert.jpg
@@ -26,6 +26,7 @@ input=$1
 ./gift -median=5 $input            > median.jpg
 ./gift -min=5 $input               > min.jpg
 ./gift -resize=200,0 $input        > resize.jpg
+./gift -rotate=60 $input           > rotate60.jpg
 ./gift -rotate=90 $input           > rotate90.jpg
 ./gift -rotate=180 $input          > rotate180.jpg
 ./gift -rotate=270 $input          > rotate270.jpg
