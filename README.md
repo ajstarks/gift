@@ -39,7 +39,7 @@ Here are the command flags:
     -median=<value>: local median filter (kernel size)
     -min=<value>: local minimum (kernel size)
     -resize=w,h: resize w,h
-    -rotate=<value>: rotate 90, 180, 270 degrees counter-clockwise
+    -rotate=<value>: rotate specified degrees counter-clockwise
     -saturation=<value>: saturation value (-100, 500)
     -sepia=<value>: sepia percentage (0-100)
     -sigmoid=midpint,factor: sigmoid contrast
