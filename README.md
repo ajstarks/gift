@@ -24,6 +24,8 @@ Here are the command flags:
 
     -blur=0: blur value
     -brightness=<value>: brightness value (-100, 100)
+    -colorize=hue,saturation,percent
+    -colorbalance=%red,%green,%blue
     -contrast=<value>: contrast value (-100, 100)
     -crop=x1,y1,x2,y2
     -edge: edge
