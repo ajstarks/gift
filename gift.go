@@ -17,7 +17,7 @@ import (
 var (
 	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue float64
 	gray, neg, xpose, xverse, fliph, flipv, emboss, edge                    bool
-	res, cropspec, sigspec, unsharp                                         string
+	res, cropspec, sigspec, unsharp, colorize, colorbal                     string
 	rotvalue, minvalue, maxvalue, meanvalue, medvalue                       int
 )
 
@@ -46,6 +46,8 @@ func main() {
 	flag.StringVar(&cropspec, "crop", "", "crop x1,y1,x2,y2")
 	flag.StringVar(&sigspec, "sigmoid", "", "sigmoid contrast (midpoint,factor)")
 	flag.StringVar(&unsharp, "unsharp", "", "unsharp mask (sigma,amount,threshold)")
+	flag.StringVar(&colorize, "colorize", "", "colorize (hue, saturation, percentage)")
+	flag.StringVar(&colorbal, "colorbalance", "", "color balance (%red, %green, %blue)")
 
 	flag.Parse()
 
@@ -224,6 +226,28 @@ func main() {
 			os.Exit(6)
 		}
 		g.Add(gift.Sigmoid(midpoint, factor))
+	}
+
+	// colorize
+	if len(colorize) > 0 {
+		var chue, csaturation, cpercent float32
+		nr, err := fmt.Sscanf(colorize, "%g,%g,%g", &chue, &csaturation, &cpercent)
+		if nr != 3 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -colorize hue,saturation,percent\n")
+			os.Exit(7)
+		}
+		g.Add(gift.Colorize(chue, csaturation, cpercent))
+	}
+
+	// color balance
+	if len(colorbal) > 0 {
+		var pctred, pctblue, pctgreen float32
+		nr, err := fmt.Sscanf(colorbal, "%g,%g,%g", &pctred, &pctgreen, &pctblue)
+		if nr != 3 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -colorbalance %red,%green,%blue\n")
+			os.Exit(8)
+		}
+		g.Add(gift.ColorBalance(pctred, pctgreen, pctblue))
 	}
 
 	// make the filtered image, writing to stdout
