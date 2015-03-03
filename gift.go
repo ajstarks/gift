@@ -16,7 +16,7 @@ import (
 
 var (
 	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue float64
-	gray, neg, xpose, xverse, fliph, flipv, emboss, edge                    bool
+	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel             bool
 	res, cropspec, sigspec, unsharp, colorize, colorbal                     string
 	rotvalue, minvalue, maxvalue, meanvalue, medvalue                       int
 )
@@ -41,7 +41,8 @@ func main() {
 	flag.BoolVar(&xpose, "transpose", false, "flip horizontally and rotate 90° counter-clockwise")
 	flag.BoolVar(&xverse, "transverse", false, " flips vertically and rotate 90° counter-clockwise")
 	flag.BoolVar(&emboss, "emboss", false, "emboss")
-	flag.BoolVar(&edge, "edge", false, "edge")
+	flag.BoolVar(&edge, "edge", false, "edge filter")
+	flag.BoolVar(&sobel, "sobel", false, "sobel filter")
 	flag.StringVar(&res, "resize", "", "resize w,h")
 	flag.StringVar(&cropspec, "crop", "", "crop x1,y1,x2,y2")
 	flag.StringVar(&sigspec, "sigmoid", "", "sigmoid contrast (midpoint,factor)")
@@ -182,6 +183,11 @@ func main() {
 		g.Add(gift.Convolution(
 			[]float32{-1, -1, -1, -1, 8, -1, -1, -1, -1},
 			false, false, false, 0.0))
+	}
+
+	// Sobel filter
+	if sobel {
+		g.Add(gift.Sobel())
 	}
 
 	// resize
