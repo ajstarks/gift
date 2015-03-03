@@ -42,6 +42,7 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -saturation=-50 "$input"        > sat-50.$enc
 ./gift -sepia=100 "$input"             > sepia.$enc
 ./gift -sigmoid=0.5,5.0 "$input"       > sigmoid.$enc
+./gift -sobel "$input"                 > sobel.$enc
 ./gift -transpose "$input"             > transpose.$enc
 ./gift -transverse "$input"            > transverse.$enc
 ./gift -unsharp=1.0,1.5,0.0 "$input"   > unsharp.$enc
