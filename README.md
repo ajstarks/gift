@@ -44,6 +44,7 @@ Here are the command flags:
     -rotate=<value>: rotate specified degrees counter-clockwise
     -saturation=<value>: saturation value (-100, 500)
     -sepia=<value>: sepia percentage (0-100)
+    -sobel: apply Sobel filter
     -sigmoid=midpint,factor: sigmoid contrast
     -transpose: flip horizontally and rotate 90° counter-clockwise
     -transverse:  flips vertically and rotate 90° counter-clockwise
