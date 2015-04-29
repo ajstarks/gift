@@ -20,6 +20,7 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -colorize=240,50,100 "$input"   > colorize.$enc
 ./gift -colorbalance=20,-20,0 "$input" > colorbalance.$enc
 ./gift -crop=90,90,250,250 "$input"    > crop.$enc
+./gift -cropsize=100,100 "$input"      > cropsize.$enc
 ./gift -edge "$input"                  > edge.$enc
 ./gift -emboss "$input"                > emboss.$enc
 ./gift -fliph "$input"                 > fliph.$enc
@@ -34,6 +35,8 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -median=5 "$input"              > median.$enc
 ./gift -min=5 "$input"                 > min.$enc
 ./gift -resize=200,0 "$input"          > resize.$enc
+./gift -resizefit=100,100 "$input"     > resizefit.$enc
+./gift -resizefill=100,100 "$input"    > resizefill.$enc
 ./gift -rotate=60 "$input"             > rotate60.$enc
 ./gift -rotate=90 "$input"             > rotate90.$enc
 ./gift -rotate=180 "$input"            > rotate180.$enc
