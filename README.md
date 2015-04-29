@@ -23,32 +23,35 @@ Filters can be combined.  For example to blur and invert:
 Here are the command flags:
 
     -blur=0: blur value
-    -brightness=<value>: brightness value (-100, 100)
-    -colorize=hue,saturation,percent
-    -colorbalance=%red,%green,%blue
-    -contrast=<value>: contrast value (-100, 100)
-    -crop=x1,y1,x2,y2
-    -edge: edge
-    -emboss: emboss
-    -fliph: flip horizontal
-    -flipv: flip vertical
-    -gamma=<value>: gamma value
-    -gray: grayscale
-    -hue=<value>: hue value (-180, 180)
-    -invert: invert
-    -max=<value>: local maximum (kernel size)
-    -mean=<value>: local mean filter (kernel size)
-    -median=<value>: local median filter (kernel size)
-    -min=<value>: local minimum (kernel size)
-    -resize=w,h: resize w,h
-    -rotate=<value>: rotate specified degrees counter-clockwise
-    -saturation=<value>: saturation value (-100, 500)
-    -sepia=<value>: sepia percentage (0-100)
-    -sobel: apply Sobel filter
-    -sigmoid=midpint,factor: sigmoid contrast
-    -transpose: flip horizontally and rotate 90° counter-clockwise
-    -transverse:  flips vertically and rotate 90° counter-clockwise
-    -unsharp=sigma,amount,threshold: unsharp mask
+    -brightness=-200: brightness value (-100, 100)
+    -colorbalance="": color balance (%red, %green, %blue)
+    -colorize="": colorize (hue, saturation, percentage)
+    -contrast=-200: contrast value (-100, 100)
+    -crop="": crop x1,y1,x2,y2
+    -cropsize="": crop w h
+    -edge=false: edge filter
+    -emboss=false: emboss
+    -fliph=false: flip horizontal
+    -flipv=false: flip vertical
+    -gamma=0: gamma value
+    -gray=false: grayscale
+    -hue=-200: hue value (-180, 180)
+    -invert=false: invert
+    -max=0: local maximum (kernel size)
+    -mean=0: local mean filter (kernel size)
+    -median=0: local median filter (kernel size)
+    -min=0: local minimum (kernel size)
+    -resize="": resize w,h
+    -resizefill="": resizefill w,h
+    -resizefit="": resizefit w,h
+    -rotate=0: rotate specified degrees counter-clockwise
+    -saturation=-200: saturation value (-100, 500)
+    -sepia=-1: sepia percentage (0-100)
+    -sigmoid="": sigmoid contrast (midpoint,factor)
+    -sobel=false: sobel filter
+    -transpose=false: flip horizontally and rotate 90° counter-clockwise
+    -transverse=false:  flips vertically and rotate 90° counter-clockwise
+    -unsharp="": unsharp mask (sigma,amount,threshold)
 
 
 See testgift.sh for typical usage
