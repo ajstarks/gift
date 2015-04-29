@@ -15,10 +15,10 @@ import (
 )
 
 var (
-	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue float64
-	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel             bool
-	res, cropspec, sigspec, unsharp, colorize, colorbal                     string
-	rotvalue, minvalue, maxvalue, meanvalue, medvalue                       int
+	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue        float64
+	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel                    bool
+	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal string
+	rotvalue, minvalue, maxvalue, meanvalue, medvalue                              int
 )
 
 func main() {
@@ -44,7 +44,10 @@ func main() {
 	flag.BoolVar(&edge, "edge", false, "edge filter")
 	flag.BoolVar(&sobel, "sobel", false, "sobel filter")
 	flag.StringVar(&res, "resize", "", "resize w,h")
+	flag.StringVar(&resfit, "resizefill", "", "resizefill w,h")
+	flag.StringVar(&resfill, "resizefit", "", "resizefit w,h")
 	flag.StringVar(&cropspec, "crop", "", "crop x1,y1,x2,y2")
+	flag.StringVar(&cropsize, "cropsize", "", "crop w h")
 	flag.StringVar(&sigspec, "sigmoid", "", "sigmoid contrast (midpoint,factor)")
 	flag.StringVar(&unsharp, "unsharp", "", "unsharp mask (sigma,amount,threshold)")
 	flag.StringVar(&colorize, "colorize", "", "colorize (hue, saturation, percentage)")
@@ -201,6 +204,28 @@ func main() {
 		g.Add(gift.Resize(w, h, gift.LanczosResampling))
 	}
 
+	// resize fit
+	if len(resfit) > 0 {
+		var w, h int
+		nr, err := fmt.Sscanf(resfit, "%d,%d", &w, &h)
+		if nr != 2 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -resizefit width,height\n")
+			os.Exit(3)
+		}
+		g.Add(gift.ResizeToFit(w, h, gift.LanczosResampling))
+	}
+
+	// resize fill
+	if len(resfill) > 0 {
+		var w, h int
+		nr, err := fmt.Sscanf(resfill, "%d,%d", &w, &h)
+		if nr != 2 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -resizefill width,height\n")
+			os.Exit(3)
+		}
+		g.Add(gift.ResizeToFill(w, h, gift.LanczosResampling, gift.CenterAnchor))
+	}
+
 	// crop
 	if len(cropspec) > 0 {
 		var x1, y1, x2, y2 int
@@ -210,6 +235,17 @@ func main() {
 			os.Exit(4)
 		}
 		g.Add(gift.Crop(image.Rect(x1, y1, x2, y2)))
+	}
+
+	// cropsize
+	if len(cropsize) > 0 {
+		var w, h int
+		nr, err := fmt.Sscanf(cropsize, "%d,%d", &w, &h)
+		if nr != 2 || err != nil {
+			fmt.Fprintf(os.Stderr, "use: -cropsize w,h")
+			os.Exit(4)
+		}
+		g.Add(gift.CropToSize(w, h, gift.CenterAnchor))
 	}
 
 	// unsharp
