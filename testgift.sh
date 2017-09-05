@@ -34,6 +34,7 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -mean=5 "$input"                > mean.$enc
 ./gift -median=5 "$input"              > median.$enc
 ./gift -min=5 "$input"                 > min.$enc
+./gift -pixelate=50 "$input"           > pixelate.$enc
 ./gift -resize=200,0 "$input"          > resize.$enc
 ./gift -resizefit=100,100 "$input"     > resizefit.$enc
 ./gift -resizefill=100,100 "$input"    > resizefill.$enc
