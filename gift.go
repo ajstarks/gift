@@ -18,7 +18,7 @@ var (
 	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue        float64
 	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel                    bool
 	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal string
-	rotvalue, minvalue, maxvalue, meanvalue, medvalue                              int
+	rotvalue, minvalue, maxvalue, meanvalue, medvalue, pixelatevalue               int
 )
 
 func main() {
@@ -34,6 +34,7 @@ func main() {
 	flag.IntVar(&minvalue, "min", 0, "local minimum (kernel size)")
 	flag.IntVar(&medvalue, "median", 0, "local median filter (kernel size)")
 	flag.IntVar(&meanvalue, "mean", 0, "local mean filter (kernel size)")
+	flag.IntVar(&pixelatevalue, "pixelate", 0, "pixelate")
 	flag.BoolVar(&flipv, "flipv", false, "flip vertical")
 	flag.BoolVar(&fliph, "fliph", false, "flip horizontal")
 	flag.BoolVar(&gray, "gray", false, "grayscale")
@@ -128,6 +129,11 @@ func main() {
 	// maximum
 	if maxvalue > 0 && maxvalue%1 == 0 {
 		g.Add(gift.Maximum(maxvalue, true))
+	}
+
+	// pixelate
+	if pixelatevalue > 0 {
+		g.Add(gift.Pixelate(pixelatevalue))
 	}
 
 	// rotate
