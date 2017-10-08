@@ -15,10 +15,10 @@ import (
 )
 
 var (
-	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue        float64
-	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel                    bool
-	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal string
-	rotvalue, minvalue, maxvalue, meanvalue, medvalue, pixelatevalue               int
+	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue, threshvalue float64
+	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel                          bool
+	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal       string
+	rotvalue, minvalue, maxvalue, meanvalue, medvalue, pixelatevalue                     int
 )
 
 func main() {
@@ -29,6 +29,7 @@ func main() {
 	flag.Float64Var(&satvalue, "saturation", -200, "saturation value (-100, 500)")
 	flag.Float64Var(&gammavalue, "gamma", 0, "gamma value")
 	flag.Float64Var(&sepiavalue, "sepia", -1, "sepia percentage (0-100)")
+	flag.Float64Var(&threshvalue, "threshold", -1, "color threshold percentage (0-100)")
 	flag.IntVar(&rotvalue, "rotate", 0, "rotate specified degrees counter-clockwise")
 	flag.IntVar(&maxvalue, "max", 0, "local maximum (kernel size)")
 	flag.IntVar(&minvalue, "min", 0, "local minimum (kernel size)")
@@ -134,6 +135,11 @@ func main() {
 	// pixelate
 	if pixelatevalue > 0 {
 		g.Add(gift.Pixelate(pixelatevalue))
+	}
+
+	// threshold
+	if threshvalue >= 0 && threshvalue <= 100 {
+		g.Add(gift.Threshold(float32(threshvalue)))
 	}
 
 	// rotate
