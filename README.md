@@ -21,6 +21,7 @@ Filters can be combined.  For example to blur and invert:
     gift -invert -blur 4 foo.jpg > inverted-blurred.jpg
 		
 Here are the command flags:
+```
   -blur float
     	blur value
   -brightness float
@@ -81,6 +82,6 @@ Here are the command flags:
     	 flips vertically and rotate 90° counter-clockwise
   -unsharp string
     	unsharp mask (sigma,amount,threshold)
-
+```
 
 See testgift.sh for typical usage
