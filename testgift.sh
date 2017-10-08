@@ -50,3 +50,4 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -transpose "$input"             > transpose.$enc
 ./gift -transverse "$input"            > transverse.$enc
 ./gift -unsharp=1.0,1.5,0.0 "$input"   > unsharp.$enc
+./gift -threshold=50 "$input"          > threshold.$enc
