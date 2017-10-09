@@ -22,7 +22,7 @@ Filters can be combined.  For example to blur and invert:
 		
 Here are the command flags:
 ```
-  -blur float
+   -blur float
     	blur value
   -brightness float
     	brightness value (-100, 100) (default -200)
@@ -60,6 +60,8 @@ Here are the command flags:
     	local median filter (kernel size)
   -min int
     	local minimum (kernel size)
+  -pixelate int
+    	pixelate
   -resize string
     	resize w,h
   -resizefill string
@@ -76,6 +78,8 @@ Here are the command flags:
     	sigmoid contrast (midpoint,factor)
   -sobel
     	sobel filter
+  -threshold float
+    	color threshold percentage (0-100) (default -1)
   -transpose
     	flip horizontally and rotate 90° counter-clockwise
   -transverse
