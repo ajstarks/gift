@@ -12,7 +12,7 @@ then
 	exit 3
 fi
 enc=`echo "$input" | awk -F\. '{print $NF}'`
-./gift -blur=3 "$input"                > blur.$enc
+./gift -blur=10 "$input"               > blur.$enc
 ./gift -brightness=20 "$input"         > bright30.$enc
 ./gift -brightness=-20 "$input"        > bright-30.$enc
 ./gift -contrast=30 "$input"           > contrast30.$enc
