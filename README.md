@@ -89,3 +89,11 @@ Here are the command flags:
 ```
 
 See testgift.sh for typical usage
+
+Performance
+===
+
+Running on a 2013 Macbook Pro, 2.3 GHz Intel Core i7, under Mac OS 10.13
+
+![perf-table](f.png)
+
