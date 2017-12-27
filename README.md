@@ -93,7 +93,7 @@ See testgift.sh for typical usage
 Performance
 ===
 
-Processing a 1024x768 JPEG image on a 2013 Macbook Pro, 2.3 GHz Intel Core i7, under Mac OS 10.13
+Processing a 3264x2448 JPEG image on a 2013 Macbook Pro, 2.3 GHz Intel Core i7, under Mac OS 10.13
 
-![perf-table](perf1024.png)
+![perf-table](perf3264x2448.png)
 
