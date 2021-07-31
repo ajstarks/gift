@@ -60,6 +60,8 @@ Here are the command flags:
     	local median filter (kernel size)
   -min int
     	local minimum (kernel size)
+  -opacity float
+        opacity (alpha) (0-100)
   -pixelate int
     	pixelate
   -resize string

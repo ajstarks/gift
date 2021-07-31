@@ -13,8 +13,8 @@ then
 fi
 enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -blur=10 "$input"               > blur.$enc
-./gift -brightness=20 "$input"         > bright30.$enc
-./gift -brightness=-20 "$input"        > bright-30.$enc
+./gift -brightness=20 "$input"         > bright20.$enc
+./gift -brightness=-20 "$input"        > bright-20.$enc
 ./gift -contrast=30 "$input"           > contrast30.$enc
 ./gift -contrast=-30 "$input"          > contrast-30.$enc
 ./gift -colorize=240,50,100 "$input"   > colorize.$enc
@@ -34,6 +34,7 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -mean=5 "$input"                > mean.$enc
 ./gift -median=5 "$input"              > median.$enc
 ./gift -min=5 "$input"                 > min.$enc
+./gift -opacity=50 "$input"            > opacity.$enc
 ./gift -pixelate=50 "$input"           > pixelate.$enc
 ./gift -resize=200,0 "$input"          > resize.$enc
 ./gift -resizefit=100,100 "$input"     > resizefit.$enc

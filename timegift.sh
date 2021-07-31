@@ -13,8 +13,8 @@ then
 fi
 enc=`echo "$input" | awk -F\. '{print $NF}'`
 time ./gift -blur=10 "$input"               > blur.$enc
-time ./gift -brightness=20 "$input"         > bright30.$enc
-time ./gift -brightness=-20 "$input"        > bright-30.$enc
+time ./gift -brightness=20 "$input"         > bright20.$enc
+time ./gift -brightness=-20 "$input"        > bright-20.$enc
 time ./gift -contrast=30 "$input"           > contrast30.$enc
 time ./gift -contrast=-30 "$input"          > contrast-30.$enc
 time ./gift -colorize=240,50,100 "$input"   > colorize.$enc
@@ -34,6 +34,7 @@ time ./gift -max=5 "$input"                 > max.$enc
 time ./gift -mean=5 "$input"                > mean.$enc
 time ./gift -median=5 "$input"              > median.$enc
 time ./gift -min=5 "$input"                 > min.$enc
+time ./gift -opacity 50 "$input"            > $opacity.$enc
 time ./gift -pixelate=50 "$input"           > pixelate.$enc
 time ./gift -resize=200,0 "$input"          > resize.$enc
 time ./gift -resizefit=100,100 "$input"     > resizefit.$enc
