@@ -95,7 +95,7 @@ See testgift.sh for typical usage
 Performance
 ===
 
-Processing a 3264x2448 JPEG image on a 2013 Macbook Pro, 2.3 GHz Intel Core i7, under Mac OS 10.13
+Processing a 3264x2448 JPEG image on a Lenovo X1 Carbon 5th Generation, i5-6200U CPU @ 2.30GHz, Linux 5.13.5
 
 ![perf-table](perf3264x2448.png)
 
