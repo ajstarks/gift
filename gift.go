@@ -218,7 +218,7 @@ func main() {
 		var w, h int
 		nr, err := fmt.Sscanf(res, "%d,%d", &w, &h)
 		if nr != 2 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -resize width,height\n")
+			fmt.Fprintln(os.Stderr, "use: -resize width,height")
 			os.Exit(3)
 		}
 		g.Add(gift.Resize(w, h, gift.LanczosResampling))
@@ -229,7 +229,7 @@ func main() {
 		var w, h int
 		nr, err := fmt.Sscanf(resfit, "%d,%d", &w, &h)
 		if nr != 2 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -resizefit width,height\n")
+			fmt.Fprintln(os.Stderr, "use: -resizefit width,height")
 			os.Exit(3)
 		}
 		g.Add(gift.ResizeToFit(w, h, gift.LanczosResampling))
@@ -240,7 +240,7 @@ func main() {
 		var w, h int
 		nr, err := fmt.Sscanf(resfill, "%d,%d", &w, &h)
 		if nr != 2 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -resizefill width,height\n")
+			fmt.Fprintln(os.Stderr, "use: -resizefill width,height")
 			os.Exit(3)
 		}
 		g.Add(gift.ResizeToFill(w, h, gift.LanczosResampling, gift.CenterAnchor))
@@ -251,7 +251,7 @@ func main() {
 		var x1, y1, x2, y2 int
 		nr, err := fmt.Sscanf(cropspec, "%d,%d,%d,%d", &x1, &y1, &x2, &y2)
 		if nr != 4 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -crop x1,y1,x2,y2\n")
+			fmt.Fprintln(os.Stderr, "use: -crop x1,y1,x2,y2")
 			os.Exit(4)
 		}
 		g.Add(gift.Crop(image.Rect(x1, y1, x2, y2)))
@@ -262,7 +262,7 @@ func main() {
 		var w, h int
 		nr, err := fmt.Sscanf(cropsize, "%d,%d", &w, &h)
 		if nr != 2 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -cropsize w,h")
+			fmt.Fprintln(os.Stderr, "use: -cropsize w,h")
 			os.Exit(4)
 		}
 		g.Add(gift.CropToSize(w, h, gift.CenterAnchor))
@@ -273,7 +273,7 @@ func main() {
 		var sigma, amount, threshold float32
 		nr, err := fmt.Sscanf(unsharp, "%g,%g,%g", &sigma, &amount, &threshold)
 		if nr != 3 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -unsharp sigma,amount,threshold\n")
+			fmt.Fprintln(os.Stderr, "use: -unsharp sigma,amount,threshold")
 			os.Exit(5)
 		}
 		g.Add(gift.UnsharpMask(sigma, amount, threshold))
@@ -284,7 +284,7 @@ func main() {
 		var midpoint, factor float32
 		nr, err := fmt.Sscanf(sigspec, "%g,%g", &midpoint, &factor)
 		if nr != 2 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -sigma midpoint,factor\n")
+			fmt.Fprintln(os.Stderr, "use: -sigma midpoint,factor")
 			os.Exit(6)
 		}
 		g.Add(gift.Sigmoid(midpoint, factor))
@@ -295,7 +295,7 @@ func main() {
 		var chue, csaturation, cpercent float32
 		nr, err := fmt.Sscanf(colorize, "%g,%g,%g", &chue, &csaturation, &cpercent)
 		if nr != 3 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -colorize hue,saturation,percent\n")
+			fmt.Fprintln(os.Stderr, "use: -colorize hue,saturation,percent")
 			os.Exit(7)
 		}
 		g.Add(gift.Colorize(chue, csaturation, cpercent))
@@ -306,7 +306,7 @@ func main() {
 		var pctred, pctblue, pctgreen float32
 		nr, err := fmt.Sscanf(colorbal, "%g,%g,%g", &pctred, &pctgreen, &pctblue)
 		if nr != 3 || err != nil {
-			fmt.Fprintf(os.Stderr, "use: -colorbalance %red,%green,%blue\n")
+			fmt.Fprintln(os.Stderr, "use: -colorbalance %red,%green,%blue")
 			os.Exit(8)
 		}
 		g.Add(gift.ColorBalance(pctred, pctgreen, pctblue))
