@@ -35,7 +35,7 @@ Here are the command flags:
   -crop string
     	crop x1,y1,x2,y2
   -cropsize string
-    	crop w h
+    	crop WxH
   -edge
     	edge filter
   -emboss
@@ -65,11 +65,11 @@ Here are the command flags:
   -pixelate int
     	pixelate
   -resize string
-    	resize w,h
+    	resize WxH
   -resizefill string
-    	resizefill w,h
+    	resizefill WxH
   -resizefit string
-    	resizefit w,h
+    	resizefit WxH
   -rotate int
     	rotate specified degrees counter-clockwise
   -saturation float

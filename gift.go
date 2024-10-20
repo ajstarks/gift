@@ -10,6 +10,8 @@ import (
 	"image/png"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/disintegration/gift"
 )
@@ -20,6 +22,33 @@ var (
 	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal                     string
 	rotvalue, minvalue, maxvalue, meanvalue, medvalue, pixelatevalue                                   int
 )
+
+func digits(s string, index int) (int, int) {
+	var x, y int
+	var err error
+
+	x, err = strconv.Atoi(s[0:index])
+	if err != nil {
+		return 0, 0
+	}
+	y, err = strconv.Atoi(s[index+1:])
+	if err != nil {
+		return 0, 0
+	}
+	return x, y
+}
+
+func dimen(s string) (int, int) {
+	ci := strings.Index(s, ",")
+	cx := strings.Index(s, "x")
+	if ci > 0 && len(s) > ci+1 {
+		return digits(s, ci)
+	}
+	if cx > 0 && len(s) > cx+1 {
+		return digits(s, cx)
+	}
+	return 0, 0
+}
 
 func main() {
 	flag.Float64Var(&blurvalue, "blur", 0, "blur value")
@@ -46,11 +75,11 @@ func main() {
 	flag.BoolVar(&emboss, "emboss", false, "emboss")
 	flag.BoolVar(&edge, "edge", false, "edge filter")
 	flag.BoolVar(&sobel, "sobel", false, "sobel filter")
-	flag.StringVar(&res, "resize", "", "resize w,h")
-	flag.StringVar(&resfit, "resizefill", "", "resizefill w,h")
-	flag.StringVar(&resfill, "resizefit", "", "resizefit w,h")
+	flag.StringVar(&res, "resize", "", "resize WxH")
+	flag.StringVar(&resfit, "resizefill", "", "resizefill WxH")
+	flag.StringVar(&resfill, "resizefit", "", "resizefit WxH")
 	flag.StringVar(&cropspec, "crop", "", "crop x1,y1,x2,y2")
-	flag.StringVar(&cropsize, "cropsize", "", "crop w h")
+	flag.StringVar(&cropsize, "cropsize", "", "crop WxH")
 	flag.StringVar(&sigspec, "sigmoid", "", "sigmoid contrast (midpoint,factor)")
 	flag.StringVar(&unsharp, "unsharp", "", "unsharp mask (sigma,amount,threshold)")
 	flag.StringVar(&colorize, "colorize", "", "colorize (hue, saturation, percentage)")
@@ -215,10 +244,9 @@ func main() {
 
 	// resize
 	if len(res) > 0 {
-		var w, h int
-		nr, err := fmt.Sscanf(res, "%d,%d", &w, &h)
-		if nr != 2 || err != nil {
-			fmt.Fprintln(os.Stderr, "use: -resize width,height")
+		w, h := dimen(res)
+		if w == 0 && h == 0 {
+			fmt.Fprintln(os.Stderr, "use: -resize WxH")
 			os.Exit(3)
 		}
 		g.Add(gift.Resize(w, h, gift.LanczosResampling))
@@ -226,10 +254,9 @@ func main() {
 
 	// resize fit
 	if len(resfit) > 0 {
-		var w, h int
-		nr, err := fmt.Sscanf(resfit, "%d,%d", &w, &h)
-		if nr != 2 || err != nil {
-			fmt.Fprintln(os.Stderr, "use: -resizefit width,height")
+		w, h := dimen(resfit)
+		if w == 0 && h == 0 {
+			fmt.Fprintln(os.Stderr, "use: -resizefit WxH")
 			os.Exit(3)
 		}
 		g.Add(gift.ResizeToFit(w, h, gift.LanczosResampling))
@@ -237,10 +264,9 @@ func main() {
 
 	// resize fill
 	if len(resfill) > 0 {
-		var w, h int
-		nr, err := fmt.Sscanf(resfill, "%d,%d", &w, &h)
-		if nr != 2 || err != nil {
-			fmt.Fprintln(os.Stderr, "use: -resizefill width,height")
+		w, h := dimen(resfill)
+		if w == 0 && h == 0 {
+			fmt.Fprintln(os.Stderr, "use: -resizefill WxH")
 			os.Exit(3)
 		}
 		g.Add(gift.ResizeToFill(w, h, gift.LanczosResampling, gift.CenterAnchor))
@@ -259,10 +285,9 @@ func main() {
 
 	// cropsize
 	if len(cropsize) > 0 {
-		var w, h int
-		nr, err := fmt.Sscanf(cropsize, "%d,%d", &w, &h)
-		if nr != 2 || err != nil {
-			fmt.Fprintln(os.Stderr, "use: -cropsize w,h")
+		w, h := dimen(cropsize)
+		if w == 0 && h == 0 {
+			fmt.Fprintln(os.Stderr, "use: -cropsize WxH")
 			os.Exit(4)
 		}
 		g.Add(gift.CropToSize(w, h, gift.CenterAnchor))
