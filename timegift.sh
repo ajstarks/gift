@@ -19,6 +19,8 @@ time ./gift -contrast=30 "$input"           > contrast30.$enc
 time ./gift -contrast=-30 "$input"          > contrast-30.$enc
 time ./gift -colorize=240,50,100 "$input"   > colorize.$enc
 time ./gift -colorbalance=20,-20,0 "$input" > colorbalance.$enc
+time ./gift -colorspace=l $input            > colorspace-l.$enc
+time ./gift -colorspace=s $input            > colorspace-s.$enc
 time ./gift -crop=90,90,250,250 "$input"    > crop.$enc
 time ./gift -cropsize=100,100 "$input"      > cropsize.$enc
 time ./gift -edge "$input"                  > edge.$enc

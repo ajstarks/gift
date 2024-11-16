@@ -19,7 +19,7 @@ import (
 var (
 	blurvalue, brvalue, contvalue, hvalue, satvalue, gammavalue, sepiavalue, threshvalue, opacityvalue float64
 	gray, neg, xpose, xverse, fliph, flipv, emboss, edge, sobel                                        bool
-	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal                     string
+	res, resfit, resfill, cropspec, cropsize, sigspec, unsharp, colorize, colorbal, colorspace         string
 	rotvalue, minvalue, maxvalue, meanvalue, medvalue, pixelatevalue                                   int
 )
 
@@ -75,6 +75,7 @@ func main() {
 	flag.BoolVar(&emboss, "emboss", false, "emboss")
 	flag.BoolVar(&edge, "edge", false, "edge filter")
 	flag.BoolVar(&sobel, "sobel", false, "sobel filter")
+	flag.StringVar(&colorspace, "colorspace", "", "colorspace; s: linear->sRGB, l: sRGB->linear")
 	flag.StringVar(&res, "resize", "", "resize WxH")
 	flag.StringVar(&resfit, "resizefill", "", "resizefill WxH")
 	flag.StringVar(&resfill, "resizefit", "", "resizefit WxH")
@@ -122,6 +123,16 @@ func main() {
 		g.Add(gift.ColorFunc(func(r0, g0, b0, a0 float32) (r, g, b, a float32) {
 			return r0, g0, b0, float32(opacityvalue) / 100
 		}))
+	}
+
+	// Linear to sRGB colorspace
+	if colorspace == "s" {
+		g.Add(gift.ColorspaceLinearToSRGB())
+	}
+
+	// sRGB to linear colorspace
+	if colorspace == "l" {
+		g.Add(gift.ColorspaceSRGBToLinear())
 	}
 
 	// hue

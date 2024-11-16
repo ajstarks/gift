@@ -19,6 +19,8 @@ enc=`echo "$input" | awk -F\. '{print $NF}'`
 ./gift -contrast=-30 "$input"          > contrast-30.$enc
 ./gift -colorize=240,50,100 "$input"   > colorize.$enc
 ./gift -colorbalance=20,-20,0 "$input" > colorbalance.$enc
+./gift -colorspace=l $input            > colorspace-l.$enc
+./gift -colorspace=s $input            > colorspace-s.$enc
 ./gift -crop=90,90,250,250 "$input"    > crop.$enc
 ./gift -cropsize=100,100 "$input"      > cropsize.$enc
 ./gift -edge "$input"                  > edge.$enc
