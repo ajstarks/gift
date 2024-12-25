@@ -339,7 +339,7 @@ func main() {
 
 	// color balance
 	if len(colorbal) > 0 {
-		var pctred, pctblue, pctgreen float32
+		var pctred, pctgreen, pctblue float32
 		nr, err := fmt.Sscanf(colorbal, "%g,%g,%g", &pctred, &pctgreen, &pctblue)
 		if nr != 3 || err != nil {
 			fmt.Fprintln(os.Stderr, "use: -colorbalance %red,%green,%blue")
