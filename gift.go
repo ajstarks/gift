@@ -161,22 +161,22 @@ func main() {
 	}
 
 	// median
-	if medvalue > 0 && medvalue%1 == 0 {
+	if medvalue > 0 && medvalue%2 == 1 {
 		g.Add(gift.Median(medvalue, true))
 	}
 
 	// mean
-	if meanvalue > 0 && meanvalue%1 == 0 {
+	if meanvalue > 0 && meanvalue%2 == 1 {
 		g.Add(gift.Mean(meanvalue, true))
 	}
 
 	// minimum
-	if minvalue > 0 && minvalue%1 == 0 {
+	if minvalue > 0 && minvalue%2 == 1 {
 		g.Add(gift.Minimum(minvalue, true))
 	}
 
 	// maximum
-	if maxvalue > 0 && maxvalue%1 == 0 {
+	if maxvalue > 0 && maxvalue%2 == 1 {
 		g.Add(gift.Maximum(maxvalue, true))
 	}
 
